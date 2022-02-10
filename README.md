@@ -1,8 +1,10 @@
-#1 In /backend folder use npm install command from CLI.
+#1 type 'git clone https://github.com/Andranik-89/techvism-three.git' from CLI
 
-#2 Run npm start.
+#2 In /backend folder use npm install command from CLI.
 
-#3 In /frontend folder use npm install.
+#3 Run npm start.
 
-#4 Run ng serve.
+#4 In /frontend folder use npm install.
+
+#5 Run ng serve.
  
