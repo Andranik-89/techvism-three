@@ -2,3 +2,4 @@
 #2 Run npm start
 #3 In /frontend folder use npm install
 #4 Run ng serve
+ 
