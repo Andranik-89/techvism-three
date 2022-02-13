@@ -13,81 +13,116 @@ interface CanvasCoordinates {
     z: number,
 }
 
-describe('HttpClient testing', () => {
-  let httpClient: HttpClient;
-  let httpTestingController: HttpTestingController;
+describe('ConeService', () => {
+  let service: ConeService;
+  let httpController: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ HttpClientTestingModule ]
+      imports: [HttpClientTestingModule],
+      providers: [ConeService],
     });
-    httpClient = TestBed.inject(HttpClient);
-    httpTestingController = TestBed.inject(HttpTestingController);
   });
 
-  it('can test HttpClient.get', () => {
-    const testData = {
+  beforeEach(() => {
+    service = TestBed.inject(ConeService);
+    httpController = TestBed.inject(HttpTestingController);
+  })
+
+  it('should be created', () => {
+    expect(service).toBeTruthy();
+  });
+
+	it('should properly call getCanvasPositions', () => {
+    let defaultCoordinatesArray = {
       _id: '',
       x: 0,
       y: 0,
       z: 0
+    };
+    let mockResponse = {
+      canvas: {
+        _id: '',
+        x: 0,
+        y: 0,
+        z: 0
+      }
     }
-    httpClient.get('http://localhost:3000/api/v1/canvas')
-      .subscribe(data => {
-        console.log('data: ', data);
-        expect(data).toEqual(testData)
-        }
-      );
-    const req = httpTestingController.expectOne('http://localhost:3000/api/v1/canvas');
+
+    // shall map mockResponse into defaultCoordintesArray
+    service.getCanvasPositions().subscribe(res => {
+      expect(res).toEqual(defaultCoordinatesArray);
+    });
+
+    const req = httpController.expectOne('http://localhost:3000/api/v1/canvas');
+    // a test for method, cancel and response type
     expect(req.request.method).toEqual('GET');
-    req.flush(testData);
-    httpTestingController.verify();
+    expect(req.cancelled).toBeFalsy();
+    expect(req.request.responseType).toEqual('json');
+
+    req.flush(mockResponse);
+    httpController.verify();
+  });
+
+	it('should properly call saveCanvasPositions', () => {
+    const canvasCoordinates = {
+      x: 0,
+      y: 0,
+      z: 0,
+    }
+
+    // shall map canvasCoordinates into canvasCoordinates
+    service.saveCanvasPositions(canvasCoordinates).subscribe(res => {
+      expect(res).toEqual(canvasCoordinates);
+    });
+
+    const req = httpController.expectOne('http://localhost:3000/api/v1/canvas');
+    // a test for method, cancel and response type
+    expect(req.request.method).toEqual('POST');
+    expect(req.cancelled).toBeFalsy();
+    expect(req.request.responseType).toEqual('json');
+
+    req.flush(canvasCoordinates);
+    httpController.verify();
   });
 
   afterEach(() => {
-    httpTestingController.verify();
+    httpController.verify();
   });
 });
 
-
-// describe('ConeService', () => {
-//   let service: ConeService;
-//   let httpController: HttpTestingController;
+// describe('HttpClient testing', () => {
+//   let httpClient: HttpClient;
+//   let httpTestingController: HttpTestingController;
 
 //   beforeEach(() => {
 //     TestBed.configureTestingModule({
-//       imports: [HttpClientTestingModule],
+//       imports: [ HttpClientTestingModule ]
 //     });
-//     service = TestBed.inject(ConeService);
-//     httpController = TestBed.inject(HttpTestingController);
+//     httpClient = TestBed.inject(HttpClient);
+//     httpTestingController = TestBed.inject(HttpTestingController);
 //   });
 
-//   it('should be created', () => {
-//     expect(service).toBeTruthy();
-//   });
-
-// 	it('should call getCanvasPositions', () => {
-//     let mockCoordinatesArray = {
+//   it('can test HttpClient.get', () => {
+//     const testData = {
 //       _id: '',
 //       x: 0,
 //       y: 0,
 //       z: 0
-//     };
-
-//     service.getCanvasPositions().subscribe(res => {
-//       console.log('ressoto: ', res);
-//       expect(mockCoordinatesArray).toEqual(res);
-//     });
-
-//     const req = httpController.expectOne('http://localhost:3000/api/v1/canvas');
+//     }
+//     httpClient.get('http://localhost:3000/api/v1/canvas')
+//       .subscribe(data => {
+//         console.log('data: ', data);
+//         expect(data).toEqual(testData)
+//         }
+//       );
+//     const req = httpTestingController.expectOne('http://localhost:3000/api/v1/canvas');
 //     expect(req.request.method).toEqual('GET');
-//     console.log('req: ', req);
-
-//     req.flush(mockCoordinatesArray);
-//     httpController.verify();
+//     req.flush(testData);
+//     httpTestingController.verify();
 //   });
 
 //   afterEach(() => {
-//     httpController.verify();
+//     httpTestingController.verify();
 //   });
 // });

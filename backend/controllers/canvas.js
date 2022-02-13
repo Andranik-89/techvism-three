@@ -6,8 +6,8 @@ const saveCanvas = async (req, res, next) => {
     console.log('here: ', x, y, z);
     try {
         const canvas = await Canvas.updateOne({}, { x, y, z }, {upsert: true});
-
-        res.status(200).json({ canvas })
+        console.log('canvas: ', canvas);
+        res.status(200).json({ x, y, z })
     } catch (error) {
         next(error);
     }
